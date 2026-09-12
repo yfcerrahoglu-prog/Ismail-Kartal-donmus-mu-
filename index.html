@@ -3,97 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İsmail Kartal Dönmüş mü?</title>
+    <title>İsmail Kartal Bugün Dönmüş mü?</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #0d1b2a;
-            color: #ffffff;
+            font-family: 'Segoe UI', -apple-system, Roboto, sans-serif;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            text-align: center;
+            /* 16:9 PC Ekranı İçin Fenerbahçe Temalı Dinamik Arka Plan */
+            background: radial-gradient(circle at center, #002d62 0%, #000b18 100%);
+            color: #ffffff;
             padding: 20px;
+            overflow: hidden;
+            position: relative;
         }
+
+        /* Arka Plan Sarı-Lacivert Çizgi Desenleri */
+        body::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 40px,
+                rgba(254, 209, 0, 0.05) 40px,
+                rgba(254, 209, 0, 0.05) 80px
+            );
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
         .container {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            max-width: 500px;
+            background: rgba(15, 23, 42, 0.85);
+            padding: 40px 50px;
+            border-radius: 24px;
+            text-align: center;
+            max-width: 550px;
             width: 100%;
+            border: 2px solid #fed100;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(254, 209, 0, 0.2);
+            position: relative;
+            z-index: 10;
         }
+
+        /* İsmail Kartal Karikatür İllüstrasyon Alanı */
+        .avatar-box {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #fed100, #002d62);
+            border-radius: 50%;
+            padding: 4px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+        .avatar-inner {
+            width: 100%;
+            height: 100%;
+            background: #001e42;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            color: #e0e1dd;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #f8fafc;
+            letter-spacing: 0.5px;
         }
-        .answer {
+
+        .status {
             font-size: 4.5rem;
             font-weight: 900;
-            margin: 20px 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            margin: 10px 0;
+            letter-spacing: 3px;
         }
-        .evet { color: #2ec4b6; text-shadow: 0 0 20px rgba(46, 196, 182, 0.6); }
-        .hayir { color: #e63946; text-shadow: 0 0 20px rgba(230, 57, 70, 0.6); }
-        
-        .details {
+        .status.hayir {
+            color: #fed100; /* Fenerbahçe Sarısı */
+            text-shadow: 0 0 25px rgba(254, 209, 0, 0.6);
+        }
+        .status.evet {
+            color: #22c55e;
+            text-shadow: 0 0 25px rgba(34, 197, 94, 0.6);
+        }
+
+        .date {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .description {
             font-size: 0.95rem;
-            color: #a3a3a3;
+            color: #94a3b8;
             margin-top: 15px;
             font-style: italic;
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            color: #777;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
+        <!-- Vektörel Karikatür Simgesi -->
+        <div class="avatar-box">
+            <div class="avatar-inner">
+                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#fed100" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
+        </div>
+
         <h1>İsmail Kartal bugün dönmüş mü?</h1>
         
-        <div id="status" class="answer hayir">HAYIR</div>
+        <div id="status" class="status hayir">...</div>
         
-        <p id="note" class="details">Haberler taranıyor...</p>
+        <div id="date" class="date">-</div>
         
-        <div class="footer">
-            <p>Son Güncelleme: <span id="last-updated">-</span></p>
-            <p>Yapay zeka tarafından günlük olarak kontrol edilmektedir.</p>
-        </div>
+        <p id="description" class="description"></p>
     </div>
 
     <script>
-        async function fetchStatus() {
-            try {
-                const response = await fetch('data.json?v=' + new Date().getTime());
-                const data = await response.json();
-                
-                const statusDiv = document.getElementById('status');
-                const noteDiv = document.getElementById('note');
-                const updatedSpan = document.getElementById('last-updated');
+        fetch('data.json?v=' + new Date().getTime())
+            .then(response => response.json())
+            .then(data => {
+                const statusEl = document.getElementById('status');
+                const descEl = document.getElementById('description');
+                const dateEl = document.getElementById('date');
 
-                statusDiv.innerText = data.cevap.toUpperCase();
-                statusDiv.className = 'answer ' + (data.cevap.toLowerCase() === 'evet' ? 'evet' : 'hayir');
-                noteDiv.innerText = data.aciklama;
-                updatedSpan.innerText = data.tarih;
-            } catch (error) {
-                console.error('Veri çekilemedi:', error);
-            }
-        }
+                statusEl.textContent = data.cevap.toUpperCase();
+                descEl.textContent = data.aciklama;
+                dateEl.textContent = data.tarih;
 
-        fetchStatus();
+                if (data.cevap.toLowerCase() === 'evet') {
+                    statusEl.className = 'status evet';
+                } else {
+                    statusEl.className = 'status hayir';
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                document.getElementById('status').textContent = 'HATA';
+            });
     </script>
 </body>
 </html>
