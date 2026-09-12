@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İsmail Kartal Dönmüş mü?</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0d1b2a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #e0e1dd;
+        }
+        .answer {
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .evet { color: #2ec4b6; text-shadow: 0 0 20px rgba(46, 196, 182, 0.6); }
+        .hayir { color: #e63946; text-shadow: 0 0 20px rgba(230, 57, 70, 0.6); }
+        
+        .details {
+            font-size: 0.95rem;
+            color: #a3a3a3;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>İsmail Kartal bugün dönmüş mü?</h1>
+        
+        <div id="status" class="answer hayir">HAYIR</div>
+        
+        <p id="note" class="details">Haberler taranıyor...</p>
+        
+        <div class="footer">
+            <p>Son Güncelleme: <span id="last-updated">-</span></p>
+            <p>Yapay zeka tarafından günlük olarak kontrol edilmektedir.</p>
+        </div>
+    </div>
+
+    <script>
+        async function fetchStatus() {
+            try {
+                const response = await fetch('data.json?v=' + new Date().getTime());
+                const data = await response.json();
+                
+                const statusDiv = document.getElementById('status');
+                const noteDiv = document.getElementById('note');
+                const updatedSpan = document.getElementById('last-updated');
+
+                statusDiv.innerText = data.cevap.toUpperCase();
+                statusDiv.className = 'answer ' + (data.cevap.toLowerCase() === 'evet' ? 'evet' : 'hayir');
+                noteDiv.innerText = data.aciklama;
+                updatedSpan.innerText = data.tarih;
+            } catch (error) {
+                console.error('Veri çekilemedi:', error);
+            }
+        }
+
+        fetchStatus();
+    </script>
+</body>
+</html>
